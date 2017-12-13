@@ -28,7 +28,8 @@ public class Service {
             .name("get_order_failed_requests_total").help("Total requests.").register();
     static final Counter requests = Counter.build()
             .name("requests_total").help("Total requests.").register();
-
+    static final Gauge inprogressRequests = Gauge.build()
+            .name("inprogress_requests").help("Inprogress requests.").register();
 
     static final Summary requestLatency = Summary.build()
             .name("requests_latency_seconds").help("Request latency in seconds.").register();
@@ -39,6 +40,7 @@ public class Service {
 
     @RequestMapping(value="/orders/",method = RequestMethod.POST)
     public WOrder createOrder(@RequestBody WOrder wOrder){
+        inprogressRequests.inc();
         postOrderRequests.inc();
         requests.inc();
         Summary.Timer timer = requestLatency.startTimer();
@@ -49,13 +51,14 @@ public class Service {
         finally{
            System.out.println("timer observed:"+timer.observeDuration());
             System.out.println("histo observed:"+timerH.observeDuration());
+            inprogressRequests.dec();
         }
 
     }
 
     @RequestMapping(value="/orders/{id}",method=RequestMethod.GET)
     public ResponseEntity<?> getOrder(@PathVariable("id") String id) {
-        getOrderRequests.inc();requests.inc();
+        inprogressRequests.inc();getOrderRequests.inc();requests.inc();
         Summary.Timer timer = requestLatency.startTimer();
         Histogram.Timer timerH =requestLatencyH.startTimer();
         try {
@@ -70,7 +73,7 @@ public class Service {
         finally{
            System.out.println("timer observed:"+timer.observeDuration());
             System.out.println("histo observed:"+timerH.observeDuration());
-
+            inprogressRequests.dec();
         }
     }
 }
