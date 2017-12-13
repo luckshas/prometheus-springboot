@@ -5,6 +5,7 @@ import info.luxman.prometheusdemo.exception.CustomErrorType;
 import info.luxman.prometheusdemo.model.WOrder;
 
 import io.prometheus.client.Counter;
+import io.prometheus.client.Gauge;
 import io.prometheus.client.Histogram;
 import io.prometheus.client.Summary;
 import org.springframework.beans.factory.annotation.Autowired;
