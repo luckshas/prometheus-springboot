@@ -47,8 +47,8 @@ public class Service {
             return serviceA.createWorder(wOrder);
         }
         finally{
-            timer.observeDuration();
-            timerH.observeDuration();
+           System.out.println("timer observed:"+timer.observeDuration());
+            System.out.println("histo observed:"+timerH.observeDuration());
         }
 
     }
@@ -68,8 +68,8 @@ public class Service {
                 HttpStatus.NOT_FOUND);
         }
         finally{
-            timer.observeDuration();
-            timerH.observeDuration();
+           System.out.println("timer observed:"+timer.observeDuration());
+            System.out.println("histo observed:"+timerH.observeDuration());
 
         }
     }
